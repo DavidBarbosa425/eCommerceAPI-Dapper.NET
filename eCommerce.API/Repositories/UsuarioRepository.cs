@@ -25,14 +25,15 @@ namespace eCommerce.API.Repositories
         }
         public void Update(Usuario usuario)
         {
+            _db.Remove(_db.FirstOrDefault(x => x.Id == usuario.Id));
+            _db.Add(usuario);
 
-            usuario.Id = usuario.Id;
-            usuario.Nome = usuario.Nome;
-            usuario.Email = usuario.Email;
+
         }
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+
+            _db.Remove(_db.FirstOrDefault(x => x.Id == id));
         }
 
     }
