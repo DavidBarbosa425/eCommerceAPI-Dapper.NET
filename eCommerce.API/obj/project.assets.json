@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "Dapper/2.0.90": {
+      "Dapper/2.0.123": {
         "type": "package",
         "compile": {
           "lib/net5.0/Dapper.dll": {}
@@ -214,15 +214,15 @@
     }
   },
   "libraries": {
-    "Dapper/2.0.90": {
-      "sha512": "e4YjOLJptnpwHIbP8HxjaYf7So9lhUC43rvvGMEkH4Q4CiVlm4rOxYDo0HyuHlMQKj0U5Ob/nCMm52TUhTaZQg==",
+    "Dapper/2.0.123": {
+      "sha512": "RDFF4rBLLmbpi6pwkY7q/M6UXHRJEOerplDGE5jwEkP/JGJnBauAClYavNKJPW1yOTWRPIyfj4is3EaJxQXILQ==",
       "type": "package",
-      "path": "dapper/2.0.90",
+      "path": "dapper/2.0.123",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Dapper.png",
-        "dapper.2.0.90.nupkg.sha512",
+        "dapper.2.0.123.nupkg.sha512",
         "dapper.nuspec",
         "lib/net461/Dapper.dll",
         "lib/net461/Dapper.xml",
@@ -673,7 +673,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Dapper >= 2.0.90",
+      "Dapper >= 2.0.123",
       "Swashbuckle.AspNetCore >= 6.2.3",
       "System.Data.SqlClient >= 4.8.3"
     ]
@@ -719,7 +719,7 @@
         "dependencies": {
           "Dapper": {
             "target": "Package",
-            "version": "[2.0.90, )"
+            "version": "[2.0.123, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
