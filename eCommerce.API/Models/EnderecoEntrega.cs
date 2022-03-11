@@ -12,7 +12,7 @@
         public string Endereco { get; set; }
         public string  Numero { get; set; }
         public string Complemento { get; set; }
-        public Usuario Usuario { get; set; }
+        public Usuario? Usuario { get; set; }
 
     }
 }

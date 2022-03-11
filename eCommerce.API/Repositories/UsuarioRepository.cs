@@ -19,26 +19,18 @@ namespace eCommerce.API.Repositories
 
         public List<Usuario> Get()
         {
-            return _connection.Query<Usuario>("select id,nome,email,sexo,rg,cpf,nomeMae,situacaoCadastro,8 from usuarios").ToList();
+            return _connection.Query<Usuario>("select * from usuarios").ToList();
         }
         public Usuario Get(int id)
         {
-            return _db.FirstOrDefault(x => x.Id == id);
+            return _connection.QuerySingleOrDefault<Usuario>("select * from usuarios where id = @Id", new {Id = id });
         }
         public void Insert(Usuario usuario)
         {
-            var ultimoUsuario = _db.LastOrDefault();
+            string sql = "insert into usuarios (nome,email,sexo,rg,cpf,nomeMae,situacaoCadastro,datacadastro)" +
+                "values (@nome,@email,@sexo,@rg,@cpf,@nomeMae,@situacaoCadastro,@datacadastro); select cast(scope_identity() as int);";
 
-            if (ultimoUsuario == null)
-            {
-                usuario.Id = 1;
-            }
-            else
-            {
-                usuario.Id = ultimoUsuario.Id;
-                usuario.Id++;
-            }
-            _db.Add(usuario);
+            usuario.Id = _connection.Query<int>(sql, usuario).Single();
         }
         public void Update(Usuario usuario)
         {
