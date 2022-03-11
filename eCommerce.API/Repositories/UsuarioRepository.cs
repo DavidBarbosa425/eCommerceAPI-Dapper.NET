@@ -23,7 +23,16 @@ namespace eCommerce.API.Repositories
         }
         public Usuario Get(int id)
         {
-            return _connection.QuerySingleOrDefault<Usuario>("select * from usuarios where id = @Id", new {Id = id });
+            return _connection.Query<Usuario, Contato, Usuario>("select * from Usuarios u" +
+                " left join Contatos c" +
+                " on u.id = c.UsuarioId" +
+                " where u.Id = @Id", (usuario, contato) =>
+                {
+                    usuario.Contato = contato;
+                    return usuario;
+                },
+                new {Id = id}
+           ).SingleOrDefault();
         }
         public void Insert(Usuario usuario)
         {
@@ -47,13 +56,6 @@ namespace eCommerce.API.Repositories
 
             _connection.Execute("delete from usuarios where id = @Id", new {Id = id});
         }
-
-        private static List<Usuario> _db = new List<Usuario>()
-        {
-            new Usuario(){Id = 1, Nome = "Axl Rose", Email = "gunsandroses@gmail.com"},
-            new Usuario(){Id = 2, Nome = "Slash", Email = "gunsandroses@gmail.com"},
-            new Usuario{Id = 3, Nome = "Duff Mackgan", Email = "gunsandroses@gmail.com"}
-        };
 
     }
 }
