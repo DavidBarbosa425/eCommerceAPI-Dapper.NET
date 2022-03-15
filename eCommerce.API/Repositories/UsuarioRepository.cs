@@ -19,7 +19,34 @@ namespace eCommerce.API.Repositories
 
         public List<Usuario> Get()
         {
-            return _connection.Query<Usuario>("select * from usuarios").ToList();
+            //return _connection.Query<Usuario>("select * from usuarios").ToList();
+            List<Usuario> usuarios = new List<Usuario>();
+
+            string sql = "select * from Usuarios u" +
+                " left join Contatos c " +
+                " on u.id = c.UsuarioId" +
+                " left join EnderecosEntrega ee" +
+                " on ee.UsuarioId = u.Id";
+
+            _connection.Query<Usuario, Contato, EnderecoEntrega, Usuario>(sql,
+                (Usuario, Contato, EnderecoEntrega) =>
+                {
+                    if (usuarios.SingleOrDefault(us => us.Id == us.Id) == null)
+                    {
+                        Usuario.EnderecosEntrega = new List<EnderecoEntrega>();
+                        Usuario.Contato = Contato;
+                        usuarios.Add(Usuario);
+                    }
+                    else
+                    {
+                        Usuario = usuarios.SingleOrDefault(us => us.Id == us.Id);
+                    }
+
+                    Usuario.EnderecosEntrega.Add(EnderecoEntrega);
+                    return Usuario;
+                }
+                );
+            return usuarios;
         }
         public Usuario Get(int id)
         {
