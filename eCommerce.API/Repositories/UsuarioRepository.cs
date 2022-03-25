@@ -19,65 +19,83 @@ namespace eCommerce.API.Repositories
 
         public List<Usuario> Get()
         {
-            //return _connection.Query<Usuario>("select * from usuarios").ToList();
+            //return _connection.Query<Usuario>("SELECT * FROM Usuarios").ToList();
             List<Usuario> usuarios = new List<Usuario>();
+            string sql = "SELECT U.*, C.*, EE.*, D.* FROM Usuarios as U LEFT JOIN Contatos C ON C.UsuarioId = U.Id LEFT JOIN EnderecosEntrega EE ON EE.UsuarioId = U.Id LEFT JOIN UsuariosDepartamentos UD ON UD.UsuarioId = U.Id LEFT JOIN Departamentos D ON UD.DepartamentoId = D.Id";
 
-            string sql = "select * from Usuarios u" +
-                " left join Contatos c " +
-                " on u.id = c.UsuarioId" +
-                " left join EnderecosEntrega ee" +
-                " on ee.UsuarioId = u.Id";
+            _connection.Query<Usuario, Contato, EnderecoEntrega, Departamento, Usuario>(sql,
+                (usuario, contato, enderecoEntrega, departamento) => {
 
-            _connection.Query<Usuario, Contato, EnderecoEntrega, Usuario>(sql,
-                (Usuario, Contato, EnderecoEntrega) =>
-                {
-                    if (usuarios.SingleOrDefault(us => us.Id == us.Id) == null)
+                    //Verificação do usuário.
+                    if (usuarios.SingleOrDefault(a => a.Id == usuario.Id) == null)
                     {
-                        Usuario.EnderecosEntrega = new List<EnderecoEntrega>();
-                        Usuario.Contato = Contato;
-                        usuarios.Add(Usuario);
+                        usuario.Departamentos = new List<Departamento>();
+                        usuario.EnderecosEntrega = new List<EnderecoEntrega>();
+                        usuario.Contato = contato;
+                        usuarios.Add(usuario);
                     }
                     else
                     {
-                        Usuario = usuarios.SingleOrDefault(us => us.Id == us.Id);
+                        usuario = usuarios.SingleOrDefault(a => a.Id == usuario.Id);
                     }
 
-                    Usuario.EnderecosEntrega.Add(EnderecoEntrega);
-                    return Usuario;
-                }
-                );
+                    //Verificação do Endereço de Entrega.
+                    if (usuario.EnderecosEntrega.SingleOrDefault(a => a.Id == enderecoEntrega.Id) == null)
+                    {
+                        usuario.EnderecosEntrega.Add(enderecoEntrega);
+                    }
+
+                    //Verificação do Departamento.
+                    if (usuario.Departamentos.SingleOrDefault(a => a.Id == departamento.Id) == null)
+                    {
+                        usuario.Departamentos.Add(departamento);
+                    }
+
+                    return usuario;
+                });
+
             return usuarios;
         }
         public Usuario Get(int id)
         {
+            //return _connection.Query<Usuario>("SELECT * FROM Usuarios").ToList();
             List<Usuario> usuarios = new List<Usuario>();
+            string sql = "SELECT U.*, C.*, EE.*, D.* FROM Usuarios as U LEFT JOIN Contatos C ON C.UsuarioId = U.Id LEFT JOIN EnderecosEntrega EE ON EE.UsuarioId = U.Id LEFT JOIN UsuariosDepartamentos UD ON UD.UsuarioId = U.Id LEFT JOIN Departamentos D ON UD.DepartamentoId = D.Id where u.id = @Id";
 
-            string sql = "select * from Usuarios u" +
-                " left join Contatos c " +
-                " on u.id = c.UsuarioId" +
-                " left join EnderecosEntrega ee" +
-                " on ee.UsuarioId = u.Id" +
-                " where u.id = @Id";
+            _connection.Query<Usuario, Contato, EnderecoEntrega, Departamento, Usuario>(sql,
+                (usuario, contato, enderecoEntrega, departamento) => {
 
-            _connection.Query<Usuario, Contato, EnderecoEntrega, Usuario>(sql,
-                (Usuario, Contato, EnderecoEntrega) =>
-                {
-                    if (usuarios.SingleOrDefault(us => us.Id == us.Id) == null)
+                    //Verificação do usuário.
+                    if (usuarios.SingleOrDefault(a => a.Id == usuario.Id) == null)
                     {
-                        Usuario.EnderecosEntrega = new List<EnderecoEntrega>();
-                        Usuario.Contato = Contato;
-                        usuarios.Add(Usuario);
+                        usuario.Departamentos = new List<Departamento>();
+                        usuario.EnderecosEntrega = new List<EnderecoEntrega>();
+                        usuario.Contato = contato;
+                        usuarios.Add(usuario);
                     }
                     else
                     {
-                        Usuario = usuarios.SingleOrDefault(us => us.Id == us.Id);
+                        usuario = usuarios.SingleOrDefault(a => a.Id == usuario.Id);
                     }
 
-                    Usuario.EnderecosEntrega.Add(EnderecoEntrega);
-                    return Usuario;
-                }, new {Id = id});
+                    //Verificação do Endereço de Entrega.
+                    if (usuario.EnderecosEntrega.SingleOrDefault(a => a.Id == enderecoEntrega.Id) == null)
+                    {
+                        usuario.EnderecosEntrega.Add(enderecoEntrega);
+                    }
+
+                    //Verificação do Departamento.
+                    if (usuario.Departamentos.SingleOrDefault(a => a.Id == departamento.Id) == null)
+                    {
+                        usuario.Departamentos.Add(departamento);
+                    }
+
+                    return usuario;
+                },new { Id = id});
+
             return usuarios.SingleOrDefault();
         }
+    
         public void Insert(Usuario usuario)
         {
             _connection.Open();
